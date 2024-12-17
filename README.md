@@ -5,4 +5,4 @@ We are developing a restaurant website that displays operating hours, allows cus
 # Layouts 
 
 ## Homepage 
--[`1.`](1.png)
+- ![`1.`](1.png)
