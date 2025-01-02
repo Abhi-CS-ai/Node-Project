@@ -1,10 +1,16 @@
+<style>
+    /* Setting Times New Roman as the font style for the entire container */
+    .container {
+      font-family: 'Times New Roman', Times, serif;
+    }
+  </style>
 <div class="tab-pane fade show active" id="employees" role="tabpanel">
     <div class="row">
         <div class="col-6">
             <h2>Employees</h2>
         </div>
         <div class="col-6 text-end">
-            <button class="btn btn-success" (click)="isFormVisiable.set(true)"> Add New</button>
+            <button class="btn btn-outline-primary" (click)="isFormVisiable.set(true)"> Add New</button>
         </div>
     </div>
    
@@ -28,7 +34,7 @@
                     <input type="email" class="form-control" name="emailId" [(ngModel)]="employeeObj.emailId" id="emailId" placeholder="Enter email">
                 </div>
                 <div class="col-md-4">
-                    <label for="deptId" class="form-label">Parent Department</label>
+                    <label for="deptId" class="form-label">Department</label>
                     <select id="deptId" class="form-select" name="parentDeptId" [(ngModel)]="parentDeptId" (change)="onParentDeptChange()">
                         <option selected>Select department</option>
                         @for (item of parentDept$ |async ; track $index) {
@@ -37,7 +43,7 @@
                         <!-- Department options -->
                     </select>
                 </div>
-                <div class="col-md-4">
+                <!--<div class="col-md-4">
                     <label for="deptId" class="form-label">Child Department</label>
                     <select id="deptId" class="form-select" name="deptId" [(ngModel)]="employeeObj.deptId">
                         <option selected>Select department</option>
@@ -45,8 +51,8 @@
                             <option [value]="item.childDeptId">{{item.departmentName}}</option>
                         }
                         <!-- Department options -->
-                    </select>
-                </div>
+                    <!--</select>
+                </div>-->
             </div>
             <div class="row">
                 <div class="col-md-4">
@@ -68,16 +74,16 @@
                 </div>
             </div> 
             @if(this.employeeObj.employeeId == 0) {
-                <button type="button" class="btn btn-primary mt-3" (click)="onSave()">
+                <button type="button" class="btn btn-outline-primary mt-3" (click)="onSave()">
                     @if (isApiCallInProgress()) {
                         <span class="spinner-grow spinner-grow-sm"></span>
                     }
                     Save Employee</button>
             } @else { 
-                <button type="button" class="btn btn-warning mt-3 " (click)="onUpdate()">Update Employee</button>
+                <button type="button" class="btn btn-outline-warning mt-3 " (click)="onUpdate()">Update Employee</button>
             }
           
-            <button class="btn btn-success mt-3 mx-2" (click)="isFormVisiable.set(false)"> Close </button>
+            <button class="btn btn-outline-primary mt-3 mx-2" (click)="isFormVisiable.set(false)"> Close </button>
         </form>
      }
     
@@ -120,8 +126,8 @@
                         <td>{{item.deptId}}</td>
                         <td>{{item.role}}</td>
                         <td>
-                            <button type="button" class="btn btn-primary mt-3" (click)="onEdit(item)">Edit</button>
-                            <button type="button" class="btn btn-danger mt-3 mx-2" (click)="onDelete(item.employeeId)">Delete</button>
+                            <button type="button" class="btn btn-outline-primary mt-3" (click)="onEdit(item)">Edit</button>
+                            <button type="button" class="btn btn-outline-danger mt-3 mx-2" (click)="onDelete(item.employeeId)">Delete</button>
                         </td>
                     </tr>
                 }

@@ -1,7 +1,13 @@
+<style>
+    /* Setting Times New Roman as the font style for the entire container */
+    .container {
+      font-family: 'Times New Roman', Times, serif;
+    }
+  </style>
 <div class="row">
     <div class="col-8">
         <div class="card">
-            <div class="card-header bg-warning">
+            <div class="card-header bg-white">
                 <h5>Project Employee List</h5>
             </div>
             <div class="card-body">
@@ -26,8 +32,8 @@
                                 <td>{{item.role}}</td>
                                 <td>{{item.role}}</td>
                                 <td>
-                                    <button type="button" class="btn btn-primary mt-3"  >Edit</button>
-                                    <button type="button" class="btn btn-danger mt-3"  >Delete</button>
+                                    <button type="button" class="btn btn-outline-primary mt-3"  >Edit</button>
+                                    <button type="button" class="btn btn-outline-danger mt-3"  >Delete</button>
                                 </td>
                             </tr>
                         }
@@ -39,7 +45,7 @@
     </div>
     <div class="col-4">
          <div class="card">
-            <div class="card-header bg-warning">
+            <div class="card-header bg-white">
                 <h5>Add New Project Employee</h5>
             </div>
             <div class="card-body">
@@ -80,7 +86,7 @@
                             <input type="checkbox"  formControlName="isActive" id="roleProjectEmployee" placeholder="Enter role">
                         </div>
                     </div>
-                    <button type="button" (click)="onSave()" class="btn btn-primary mt-3 mx-2">Submit</button>
+                    <button type="button" (click)="onSave()" class="btn btn-outline-primary mt-3 mx-2">Submit</button>
                 </form>
             </div>
         </div>

@@ -1,30 +1,62 @@
-<div class="container my-4">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+
+  <!-- Ag-Grid CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community/styles/ag-grid.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ag-grid-community/styles/ag-theme-alpine.css">
+
+  <!-- Highcharts JS -->
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+  <style>
+    .container {
+      font-family: 'Times New Roman', Times, serif;
+      margin-top: 20px;
+    }
+    #myGrid {
+      height: 400px;
+      width: 100%;
+    }
+    #chartContainer {
+      height: 400px;
+      width: 100%;
+    }
+    .card {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Dashboard Widgets -->
     <div class="row">
-      <!-- Total Employees Widget -->
       <div class="col-md-4">
-        <div class="card text-white bg-primary mb-3">
+        <div class="card text-dark bg-light">
           <div class="card-header">Total Employees</div>
           <div class="card-body">
             <h5 class="card-title">Employees</h5>
-            <p class="card-text" id="totalEmployees">{{dashboardData.totalEmployee}}</p>
+            <p class="card-text" id="totalEmployees">0</p>
           </div>
         </div>
       </div>
-  
-      <!-- Total Projects Widget -->
       <div class="col-md-4">
-        <div class="card text-white bg-success mb-3">
+        <div class="card text-dark bg-light">
           <div class="card-header">Total Projects</div>
           <div class="card-body">
             <h5 class="card-title">Projects</h5>
-            <p class="card-text" id="totalProjects">{{dashboardData.totalProject}}</p>
+            <p class="card-text" id="totalProjects">0</p>
           </div>
         </div>
       </div>
-  
-      <!-- Active Employees in Projects -->
       <div class="col-md-4">
-        <div class="card text-white bg-warning mb-3">
+        <div class="card text-dark bg-light">
           <div class="card-header">Active Project Employees</div>
           <div class="card-body">
             <h5 class="card-title">Active Employees</h5>
@@ -33,34 +65,138 @@
         </div>
       </div>
     </div>
-  
+
+    <!-- Latest Projects and Recently Hired Employees -->
     <div class="row">
-      <!-- Latest Projects -->
       <div class="col-md-6">
-        <div class="card mb-3">
+        <div class="card">
           <div class="card-header">Latest Projects</div>
           <div class="card-body">
-            <ul id="latestProjects" class="list-group">
-              @for (item of dashboardData.recentProjects; track $index) {
-                <li class="mx-2">{{item.projectName}}</li>
-              } 
-            </ul>
+            <ul id="latestProjects" class="list-group"></ul>
           </div>
         </div>
       </div>
-  
-      <!-- Recently Hired Employees -->
       <div class="col-md-6">
-        <div class="card mb-3">
-          <div class="card-header">Recently Hired Employees</div>
+        <div class="card">
+          <div class
+          ="card-header">Recently Hired Employees</div>
           <div class="card-body">
-            <ul id="recentEmployees" class="list-group">
-              @for (item of dashboardData.recentEmployee; track $index) {
-                <li class="mx-2">{{item.employeeName}}</li>
-              } 
-            </ul>
+            <ul id="recentEmployees" class="list-group"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Ag-Grid Section -->
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">Employee Details</div>
+          <div class="card-body">
+            <div id="myGrid" class="ag-theme-alpine"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Highcharts Section -->
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">Project Progress</div>
+          <div class="card-body">
+            <div id="chartContainer"></div>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- Dependencies -->
+  <script src="https://cdn.jsdelivr.net/npm/ag-grid-community/dist/ag-grid-community.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async function () {
+      // Fetch dashboard data
+      const fetchDashboardData = async () => {
+        const response = await fetch('/api/dashboard');
+        return response.json();
+      };
+
+      const fetchEmployeeData = async () => {
+        const response = await fetch('/api/employees');
+        return response.json();
+      };
+
+      const fetchProjectProgress = async () => {
+        const response = await fetch('/api/projects/progress');
+        return response.json();
+      };
+
+      // Populate Widgets
+      const populateWidgets = (data) => {
+        document.getElementById('totalEmployees').innerText = data.totalEmployee;
+        document.getElementById('totalProjects').innerText = data.totalProject;
+        document.getElementById('activeEmployees').innerText = data.activeEmployee;
+
+        const latestProjects = document.getElementById('latestProjects');
+        latestProjects.innerHTML = data.recentProjects.map(p => `<li class="list-group-item">${p.projectName}</li>`).join('');
+
+        const recentEmployees = document.getElementById('recentEmployees');
+        recentEmployees.innerHTML = data.recentEmployee.map(e => `<li class="list-group-item">${e.employeeName}</li>`).join('');
+      };
+
+      // Initialize Ag-Grid
+      const initializeAgGrid = (employeeData) => {
+        const columnDefs = [
+          { headerName: 'Employee ID', field: 'id', sortable: true, filter: true },
+          { headerName: 'Name', field: 'name', sortable: true, filter: true },
+          { headerName: 'Role', field: 'role', sortable: true, filter: true },
+          { headerName: 'Project', field: 'project', sortable: true, filter: true },
+          { headerName: 'Status', field: 'status', sortable: true, filter: true }
+        ];
+
+        const gridOptions = {
+          columnDefs,
+          rowData: employeeData,
+          defaultColDef: { flex: 1, minWidth: 100 }
+        };
+
+        const gridDiv = document.querySelector('#myGrid');
+        new agGrid.Grid(gridDiv, gridOptions);
+      };
+
+      // Initialize Highcharts
+      const initializeHighcharts = (projectProgressData) => {
+        Highcharts.chart('chartContainer', {
+          chart: { type: 'column' },
+          title: { text: 'Project Progress' },
+          xAxis: { categories: projectProgressData.map(p => p.projectName) },
+          yAxis: { title: { text: 'Progress (%)' } },
+          series: [
+            { name: 'Completed', data: projectProgressData.map(p => p.completed) },
+            { name: 'Pending', data: projectProgressData.map(p => p.pending) }
+          ]
+        });
+      };
+
+      // Fetch data and initialize components
+      try {
+        const dashboardData = await fetchDashboardData();
+        populateWidgets(dashboardData);
+
+        const employeeData = await fetchEmployeeData();
+        initializeAgGrid(employeeData);
+
+        const projectProgressData = await fetchProjectProgress();
+        initializeHighcharts(projectProgressData);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    });
+  </script>
+</body>
+</html>

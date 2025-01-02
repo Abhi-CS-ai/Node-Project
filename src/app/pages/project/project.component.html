@@ -1,3 +1,9 @@
+<style>
+    /* Setting Times New Roman as the font style for the entire container */
+    .container {
+      font-family: 'Times New Roman', Times, serif;
+    }
+  </style>
 <div class="tab-pane fade show active" id="projects" role="tabpanel">
    
  
@@ -6,7 +12,7 @@
             <h2>Projects</h2> 
         </div>
         <div class="col-6 text-end">
-            <button routerLink="/new-project/0" class="btn btn-success">New Project</button>
+            <button routerLink="/new-project/0" class="btn btn-outline-primary">New Project</button>
         </div>
     </div>
     <table class="table table-bordered">
@@ -29,8 +35,8 @@
                     <td>{{item.startDate |date:'dd-MMM-yyyy'}}</td>
                     <td>{{item.employeeName}}</td>
                     <td>
-                        <button type="button" class="btn btn-primary mt-3" (click)="onEdit(item.projectId)">Edit</button>
-                        <button type="button" class="btn btn-danger mt-3 mx-2" (click)="onDelete(item.projectId)">Delete</button>
+                        <button type="button" class="btn btn-outline-primary mt-3" (click)="onEdit(item.projectId)">Edit</button>
+                        <button type="button" class="btn btn-outline-primary mt-3 mx-2" (click)="onDelete(item.projectId)">Delete</button>
                     </td>
 
                 </tr>

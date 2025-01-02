@@ -1,38 +1,75 @@
 <div class="parent">
-    <div class="container">
-        <div class="row">
-          <!-- Left Blank Side -->
-          <div class="col-lg-6"></div>
-      
-          <!-- Right Side Form -->
-          <div class="col-lg-6 d-flex align-items-center justify-content-center right-side">
-            <div class="form-2-wrapper">
-              <div class="logo text-center">
-                <h2>Logo</h2>
-              </div>
-              <h2 class="text-center mb-4">Sign Into Your Account</h2>
-              <form action="#">
-                <div class="mb-3 form-box">
-                  <input type="email" class="form-control" id="email" [(ngModel)]="loginObj.username" name="username" placeholder="Enter Your Email" required>
-                </div>
-                <div class="mb-3">
-                  <input type="password" class="form-control" id="password" [(ngModel)]="loginObj.password" name="password" placeholder="Enter Your Password" required>
-                </div>
-                <div class="mb-3">
-                   <p>Test Credentials: userName:  admin, password:  112233</p> 
-                </div>
-                <button type="button" (click)="onLogin()" class="btn btn-outline-secondary login-btn w-100 mb-3">Login</button>
-                <div class="social-login mb-3 type--A">
-                  
-                </div>
-              </form>
-      
-              <!-- Register Link -->
-              
+  <div class="container">
+    <div class="row">
+      <!-- Left Blank Side -->
+      <div class="col-lg-3"></div>
+
+      <!-- Right Side Form -->
+      <div class="col-lg-6 d-flex align-items-center justify-content-center">
+        <div class="form-2-wrapper">
+          <div class="logo text-center"></div>
+          <h2 class="text-center mb-4">Sign Into Your Account</h2>
+          <form action="#">
+            <div class="mb-3 form-box">
+              <input type="email" class="form-control border-black" id="email" [(ngModel)]="loginObj.username" name="username" placeholder="Enter Your Email" required>
             </div>
-          </div>
+            <div class="mb-3">
+              <input type="password" class="form-control border-black" id="password" [(ngModel)]="loginObj.password" name="password" placeholder="Enter Your Password" required>
+            </div>
+            <div class="mb-3">
+              <p>Test Credentials: userName: admin, password: 112233</p>
+            </div>
+            <button type="button" (click)="onLogin()" class="btn btn-outline-dark login-btn w-100 mb-3">Login</button>
+            <div class="social-login mb-3 type--A"></div>
+          </form>
         </div>
       </div>
+    </div>
+  </div>
 </div>
 
-  
+<style>
+/* Parent container with white background */
+.parent {
+  background-color: white;
+  font-family: "Times New Roman", Times, serif;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid black;
+}
+
+/* Form wrapper styling */
+.form-2-wrapper {
+  background-color: white;
+  border: 2px solid black;
+  padding: 30px;
+  border-radius: 8px; /* Optional: Adds rounded corners */
+  width: 100%;
+  max-width: 400px;
+}
+
+/* Input and Button Styling with Black Border */
+input.form-control, button.btn {
+  border: 2px solid black !important;
+  background-color: white;
+  color: black;
+}
+
+input.form-control:focus, button.btn:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* General text styling */
+h2, p {
+  font-family: "Times New Roman", Times, serif;
+  color: black;
+}
+
+/* Login Button Styling */
+.login-btn {
+  font-weight: bold;
+}
+</style>
