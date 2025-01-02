@@ -14,8 +14,10 @@ Additionally, you will find a dropdown menu labeled Lead By Employee ID, which a
 ![5.Employees-Projects Page](n5.png)
 -  On this page, the administrator has the ability to assign specific projects to employees, utilizing the following information: Emp Project ID, Project Name, Lead By, Assigned Date, Role, and a set of Actions. This system allows for clear tracking and management of project assignments. To make things easier, there is an option to add a new project employee where the administrator can input essential details. The necessary information required for this process includes Project ID, Employee ID, Assigned Date, formatted as dd-mm-yyyy, and the Role that the employee will take on in the project. The administrator is prompted to enter the specific role that the employee will occupy, ensuring that all assignments are clearly defined and easily accessible for future reference.
 
--  BACKEND:
-   his backend API is designed for managing employee data. It provides essential functionalities to interact with the database, handle employee-related operations, and test via Postman.
+
+BACKEND:
+
+This backend API is designed for managing employee data. It provides essential functionalities to interact with the database, handle employee-related operations, and test via Postman.
 
 Database & Tables
 The backend system requires the creation of a database and several tables to store the necessary information:
