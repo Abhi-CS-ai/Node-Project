@@ -1,54 +1,58 @@
-const express = require("express");
-const pool = require("../db");
+const express = require('express');
+const pool = require('../db');
+
 const router = express.Router();
 
 // Get all projects
-router.get("/", async (req, res) => {
+router.get('/', async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM Projects ORDER BY ProjectID ASC");
-    res.json(result.rows);
+    const [rows] = await pool.query('SELECT * FROM projects ORDER BY id ASC');
+    res.status(200).json(rows);
   } catch (err) {
-    res.status(500).send(err.message);
+    res.status(500).json({ error: 'Failed to fetch projects', details: err.message });
   }
 });
 
 // Add a new project
-router.post("/", async (req, res) => {
-  const { projectName, clientName, startDate, leadByEmployeeID, contactPerson, contactNo, emailId } = req.body;
-  try {
-    const result = await pool.query(
-      "INSERT INTO Projects (ProjectName, ClientName, StartDate, LeadByEmployeeID, ContactPerson, ContactNo, EmailId) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
-      [projectName, clientName, startDate, leadByEmployeeID, contactPerson, contactNo, emailId]
-    );
-    res.json(result.rows[0]);
-  } catch (err) {
-    res.status(500).send(err.message);
-  }
-});
+router.post('/api/employees', async (req, res) => {
+  const { name, client_name, start_date, lead_by_employee_id, contact_person, contact_no, email } = req.body;
 
-// Update project
-router.put("/:id", async (req, res) => {
-  const { id } = req.params;
-  const { projectName, clientName, startDate, leadByEmployeeID, contactPerson, contactNo, emailId } = req.body;
   try {
     await pool.query(
-      "UPDATE Projects SET ProjectName=$1, ClientName=$2, StartDate=$3, LeadByEmployeeID=$4, ContactPerson=$5, ContactNo=$6, EmailId=$7 WHERE ProjectID=$8",
-      [projectName, clientName, startDate, leadByEmployeeID, contactPerson, contactNo, emailId, id]
+      'INSERT INTO projects (name, client_name, start_date, lead_by_employee_id, contact_person, contact_no, email) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      [name, client_name, start_date, lead_by_employee_id, contact_person, contact_no, email]
     );
-    res.send("Project updated successfully!");
+    res.status(201).json({ message: 'Project added successfully' });
   } catch (err) {
-    res.status(500).send(err.message);
+    res.status(500).json({ error: 'Failed to add project', details: err.message });
   }
 });
 
-// Delete project
-router.delete("/:id", async (req, res) => {
+// Update a project
+router.put('/:id', async (req, res) => {
   const { id } = req.params;
+  const { name, client_name, start_date, lead_by_employee_id, contact_person, contact_no, email } = req.body;
+
   try {
-    await pool.query("DELETE FROM projects WHERE ProjectID=$1", [id]);
-    res.send("Project deleted successfully!");
+    await pool.query(
+      'UPDATE projects SET name = ?, client_name = ?, start_date = ?, lead_by_employee_id = ?, contact_person = ?, contact_no = ?, email = ? WHERE id = ?',
+      [name, client_name, start_date, lead_by_employee_id, contact_person, contact_no, email, id]
+    );
+    res.status(200).json({ message: 'Project updated successfully' });
   } catch (err) {
-    res.status(500).send(err.message);
+    res.status(500).json({ error: 'Failed to update project', details: err.message });
+  }
+});
+
+// Delete a project
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await pool.query('DELETE FROM projects WHERE id = ?', [id]);
+    res.status(200).json({ message: 'Project deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete project', details: err.message });
   }
 });
 

@@ -1,54 +1,58 @@
-const express = require("express");
-const pool = require("../db");
+const express = require('express');
+const pool = require('../db');
+
 const router = express.Router();
 
 // Get all employees
-router.get("/", async (req, res) => {
+router.get('/', async (req, res) => {
   try {
-    const result = await pool.query("USE employee_nr SELECT * FROM employees ORDER BY EmployeeID ASC");
-    res.json(result.rows);
+    const [rows] = await pool.query('SELECT * FROM Employees ORDER BY id ASC');
+    res.status(200).json(rows);
   } catch (err) {
-    res.status(500).send(err.message);
+    res.status(500).json({ error: 'Failed to fetch employees', details: err.message });
   }
 });
 
 // Add a new employee
-router.post("/", async (req, res) => {
-  const { name, contactNo, email, department, password } = req.body;
-  try {
-    const result = await pool.query(
-      "USE employee_nr INSERT INTO employees (Name, ContactNo, Email, Department, Password) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-      [name, contactNo, email, department, password]
-    );
-    res.json(result.rows[0]);
-  } catch (err) {
-    res.status(500).send(err.message);
-  }
-});
+router.post('/', async (req, res) => {
+  const { name, contact_no, email, department, password, gender, role } = req.body;
 
-// Update employee
-router.put("/:id", async (req, res) => {
-  const { id } = req.params;
-  const { name, contactNo, email, department, password } = req.body;
   try {
     await pool.query(
-      "USE employee_nr UPDATE employees SET Name=$1, ContactNo=$2, Email=$3, Department=$4, Password=$5 WHERE EmployeeID=$6",
-      [name, contactNo, email, department, password, id]
+      'INSERT INTO Employees (name, contact_no, email, department, password, gender, role) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      [name, contact_no, email, department, password, gender, role]
     );
-    res.send("Employee updated successfully!");
+    res.status(201).json({ message: 'Employee added successfully' });
   } catch (err) {
-    res.status(500).send(err.message);
+    res.status(500).json({ error: 'Failed to add employee', details: err.message });
   }
 });
 
-// Delete employee
-router.delete("/:id", async (req, res) => {
+// Update an employee
+router.put('/:id', async (req, res) => {
   const { id } = req.params;
+  const { name, contact_no, email, department, password, gender, role } = req.body;
+
   try {
-    await pool.query("USE employee_nr DELETE FROM employees WHERE EmployeeID=$1", [id]);
-    res.send("Employee deleted successfully!");
+    await pool.query(
+      'UPDATE Employees SET name = ?, contact_no = ?, email = ?, department = ?, password = ?, gender = ?, role = ? WHERE id = ?',
+      [name, contact_no, email, department, password, gender, role, id]
+    );
+    res.status(200).json({ message: 'Employee updated successfully' });
   } catch (err) {
-    res.status(500).send(err.message);
+    res.status(500).json({ error: 'Failed to update employee', details: err.message });
+  }
+});
+
+// Delete an employee
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    await pool.query('DELETE FROM Employees WHERE id = ?', [id]);
+    res.status(200).json({ message: 'Employee deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete employee', details: err.message });
   }
 });
 

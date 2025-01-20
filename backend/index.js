@@ -1,23 +1,26 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
+
 const userRoutes = require('./routes/users');
-const pool = require('./db');
+const employeeRoutes = require('./routes/employees');
+const projectRoutes = require('./routes/projects');
+const assignmentRoutes = require('./routes/assignments');
 
 const app = express();
+
+app.use(cors({
+  origin: 'http://localhost:4200', // Allow specific origin
+}));
+
 app.use(bodyParser.json());
 
 // Routes
-app.use('/users', userRoutes);
-
-// Test DB connection
-pool.query('SELECT NOW()', (err, res) => {
-  if (err) {
-    console.error('Error connecting to database:', err);
-  } else {
-    console.log('Database connected:', res.rows[0]);
-  }
-});
+app.use('/api/users', userRoutes);
+app.use('/api/employees', employeeRoutes);
+app.use('/api/projects', projectRoutes);
+app.use('/api/assignments', assignmentRoutes);
 
 // Start server
-const PORT = 5000;
+const PORT = 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
